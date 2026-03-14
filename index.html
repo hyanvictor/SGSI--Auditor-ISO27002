@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGSI Auditor - ISO 27002</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Sistema de Gestão de Segurança da Informação</h1>
+        <nav>
+            <button onclick="showSection('auditoria')">Auditoria (ISO 27002)</button>
+            <button onclick="showSection('ativos')">Gestão de Ativos</button>
+            <button onclick="showSection('vulnerabilidades')">Vulnerabilidades/Ameaças</button>
+        </nav>
+    </header>
+
+    <main id="content">
+        <section id="auditoria" class="active">
+            <h2>Auditoria de Conformidade</h2>
+            <div id="controles-container"></div>
+            <div class="score-card">
+                <h3>Pontuação Total: <span id="total-score">0%</span></h3>
+            </div>
+        </section>
+
+        <section id="ativos">
+            <h2>Registro de Ativos</h2>
+            <form id="form-ativo">
+                <input type="hidden" id="ativo-id">
+                <div class="grid-form">
+                    <input type="text" id="at-nome" placeholder="Nome do Ativo" required>
+                    <input type="text" id="at-tipo" placeholder="Tipo (Hardware, Software, etc)">
+                    <input type="text" id="at-dono" placeholder="Dono/Responsável">
+                    <input type="text" id="at-local" placeholder="Localização">
+                    <input type="text" id="at-formato" placeholder="Formato (Digital/Físico)">
+                    <select id="at-class">
+                        <option value="Publico">Público</option>
+                        <option value="Interno">Interno</option>
+                        <option value="Confidencial">Confidencial</option>
+                    </select>
+                    <input type="number" id="at-valor" placeholder="Valor p/ Negócio (1-10)">
+                    <input type="number" id="at-custo" placeholder="Custo Inicial (R$)">
+                    <input type="number" id="at-idade" placeholder="Idade (anos)">
+                    <input type="number" id="at-reposicao" placeholder="Custo Reposição (R$)">
+                </div>
+                <button type="submit" class="btn-save">Salvar Ativo</button>
+            </form>
+            <table id="tabela-ativos">
+                <thead>
+                    <tr>
+                        <th>Nome</th><th>Tipo</th><th>Classificação</th><th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section id="vulnerabilidades">
+            <h2>Vulnerabilidades e Ameaças</h2>
+            <div class="split-view">
+                <div class="vuln-form-container">
+                    <h3>Nova Vulnerabilidade</h3>
+                    <form id="form-vuln">
+                        <select id="vuln-ativo-ref" required></select>
+                        <textarea id="vuln-desc" placeholder="Descrição da Vulnerabilidade"></textarea>
+                        <select id="vuln-tipo">
+                            <option value="Virtual">Virtual</option>
+                            <option value="Física">Física</option>
+                            <option value="Organizacional">Organizacional</option>
+                            <option value="Humana">Humana</option>
+                        </select>
+                        <button type="submit">Salvar Vulnerabilidade</button>
+                    </form>
+                </div>
+                <div class="threat-form-container">
+                    <h3>Nova Ameaça</h3>
+                    <form id="form-threat">
+                        <select id="threat-vuln-ref" required></select>
+                        <input type="text" id="threat-desc" placeholder="Descrição da Ameaça">
+                        <select id="threat-fonte">
+                            <option value="Interna">Interna</option>
+                            <option value="Externa">Externa</option>
+                        </select>
+                        <select id="threat-tipo">
+                            <option value="Natural">Natural</option>
+                            <option value="Acidental">Acidental</option>
+                            <option value="Intencional">Intencional</option>
+                        </select>
+                        <button type="submit">Salvar Ameaça</button>
+                    </form>
+                </div>
+            </div>
+            <div id="riscos-lista"></div>
+        </section>
+    </main>
+
+    <script src="/scripts/scripts.js"></script>
+</body>
+</html>

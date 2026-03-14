@@ -1,0 +1,65 @@
+:root {
+    --primary: #2c3e50;
+    --secondary: #3498db;
+    --success: #27ae60;
+    --danger: #e74c3c;
+    --light: #ecf0f1;
+}
+
+body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f4f7f6; }
+
+header { background: var(--primary); color: white; padding: 1rem; text-align: center; }
+
+nav { margin-top: 10px; }
+nav button { padding: 10px 20px; cursor: pointer; border: none; background: var(--secondary); color: white; border-radius: 4px; margin: 0 5px; }
+
+main { padding: 20px; max-width: 1200px; margin: auto; }
+
+section { display: none; }
+section.active { display: block; }
+
+.grid-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 15px; }
+
+input, select, textarea { padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+
+.control-item { background: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; border-left: 5px solid var(--secondary); }
+
+.score-card { position: fixed; bottom: 20px; right: 20px; background: var(--success); color: white; padding: 20px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+
+.btn-save { background: var(--success); color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+
+.checklist-box {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 10px;
+    border: 1px inset #eee;
+}
+
+.check-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    color: #444;
+}
+
+.check-row input[type="checkbox"] {
+    margin-right: 12px;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+}
+
+.check-row label {
+    cursor: pointer;
+    flex: 1;
+}
+
+#total-score {
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
