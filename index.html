@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SGSI Auditor - ISO 27002</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
+
 <body>
     <header>
         <h1>Sistema de Gestão de Segurança da Informação</h1>
@@ -50,7 +52,10 @@
             <table id="tabela-ativos">
                 <thead>
                     <tr>
-                        <th>Nome</th><th>Tipo</th><th>Classificação</th><th>Ações</th>
+                        <th>Nome</th>
+                        <th>Tipo</th>
+                        <th>Classificação</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -77,17 +82,30 @@
                 <div class="risc-form-container">
                     <h3>Novo Risco</h3>
                     <form id="form-risc">
-                        <select id="risc-vuln-ref" required></select>
-                        <input type="text" id="risc-desc" placeholder="Descrição do Risco">
-                        <select id="risc-fonte">
-                            <option value="Interna">Interna</option>
-                            <option value="Externa">Externa</option>
+                        <select id="risc-threat-ref" required>
+                            <option value="">Selecione a Ameaça...</option>
                         </select>
-                        <select id="risc-tipo">
-                            <option value="Natural">Natural</option>
-                            <option value="Acidental">Acidental</option>
-                            <option value="Intencional">Intencional</option>
+
+                        <input type="text" id="risc-desc" placeholder="Descrição da Consequência (Ex: Multa LGPD)">
+
+                        <select id="risc-probabilidade">
+                            <option value="">Probabilidade...</option>
+                            <option value="1">Muito Baixa</option>
+                            <option value="2">Baixa</option>
+                            <option value="3">Média</option>
+                            <option value="4">Alta</option>
+                            <option value="5">Crítica</option>
                         </select>
+
+                        <select id="risc-impacto">
+                            <option value="">Impacto...</option>
+                            <option value="1">Insignificante</option>
+                            <option value="2">Menor</option>
+                            <option value="3">Moderado</option>
+                            <option value="4">Maior</option>
+                            <option value="5">Catastrófico</option>
+                        </select>
+
                         <button type="submit">Salvar Risco</button>
                     </form>
                 </div>
@@ -115,4 +133,5 @@
 
     <script src="/scripts/scripts.js"></script>
 </body>
+
 </html>
