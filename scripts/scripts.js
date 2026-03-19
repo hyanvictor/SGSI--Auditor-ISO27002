@@ -198,7 +198,7 @@ function editarAtivo(id) {
     }
 }
 
-// --- RF07 (Vulnerabilidades e Ameaças) ---
+// --- RF07 (vulnerabilidades, ameaças e ativos) ---
 document.getElementById('form-vuln').onsubmit = function(e) {
     e.preventDefault();
     const vuln = {
