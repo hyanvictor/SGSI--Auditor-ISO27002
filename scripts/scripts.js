@@ -1,9 +1,9 @@
 // Dados Iniciais de Controles ISO 27002 (Exemplos)
 // Dados com Checklist detalhado para cada controle
 const controlesISO = [
-    { 
-        id: 1, 
-        nome: "A.5.1 Políticas de Segurança", 
+    {
+        id: 1,
+        nome: "A.5.1 Políticas de Segurança",
         objeto: "Prover orientação da direção para segurança.",
         checklist: [
             "Existe uma política de segurança documentada?",
@@ -11,9 +11,9 @@ const controlesISO = [
             "A política foi comunicada a todos os funcionários?"
         ]
     },
-    { 
-        id: 2, 
-        nome: "A.8.1 Responsabilidade pelos Ativos", 
+    {
+        id: 2,
+        nome: "A.8.1 Responsabilidade pelos Ativos",
         objeto: "Identificar ativos e definir responsabilidades.",
         checklist: [
             "Existe um inventário de ativos atualizado?",
@@ -21,9 +21,9 @@ const controlesISO = [
             "Há regras para o uso aceitável dos ativos?"
         ]
     },
-    { 
-        id: 3, 
-        nome: "A.9.1 Requisitos de Controle de Acesso", 
+    {
+        id: 3,
+        nome: "A.9.1 Requisitos de Controle de Acesso",
         objeto: "Limitar acesso a ativos de informação.",
         checklist: [
             "Existe uma política de controle de acesso físico e lógico?",
@@ -41,8 +41,8 @@ let ameacas = JSON.parse(localStorage.getItem('ameacas')) || [];
 function showSection(id) {
     document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    if(id === 'ativos') renderAtivos();
-    if(id === 'vulnerabilidades') { renderVulnDropdowns(); renderRiscos(); }
+    if (id === 'ativos') renderAtivos();
+    if (id === 'vulnerabilidades') { renderVulnDropdowns(); renderRiscos(); }
 }
 
 // --- RF02, RF03, RF04, RF05 (Auditoria) ---
@@ -53,7 +53,7 @@ function initAuditoria() {
     controlesISO.forEach(c => {
         const div = document.createElement('div');
         div.className = 'control-item';
-        
+
         // Gera o HTML do checklist
         const checklistHTML = c.checklist.map((item, index) => `
             <div class="check-row">
@@ -78,12 +78,12 @@ function calcScore() {
     const checkboxes = document.querySelectorAll('.chk-auditoria');
     const totalItens = checkboxes.length;
     const marcados = document.querySelectorAll('.chk-auditoria:checked').length;
-    
+
     let porcentagem = 0;
     if (totalItens > 0) {
         porcentagem = ((marcados / totalItens) * 100).toFixed(1);
     }
-    
+
     const display = document.getElementById('total-score');
     display.innerText = porcentagem + "%";
 
@@ -94,7 +94,7 @@ function calcScore() {
 }
 
 // --- RF06 (Gestão de Ativos - CRUD) ---
-document.getElementById('form-ativo').onsubmit = function(e) {
+document.getElementById('form-ativo').onsubmit = function (e) {
     e.preventDefault();
 
     const idExistente = document.getElementById('ativo-id').value;
@@ -149,7 +149,7 @@ function renderAtivos() {
 
 function deletarAtivo(id) {
     if (confirm("Tem certeza que deseja excluir este ativo? Isso removerá todas as vulnerabilidades e ameaças associadas a ele.")) {
-        
+
         // 1. Remove as Ameaças ligadas às Vulnerabilidades deste Ativo
         const vulnsDoAtivo = vulnerabilidades.filter(v => v.ativoId == id).map(v => v.id);
         ameacas = ameacas.filter(a => !vulnsDoAtivo.includes(a.vulnId));
@@ -175,7 +175,7 @@ function deletarAtivo(id) {
 function editarAtivo(id) {
     // 1. Encontrar o ativo pelo ID
     const ativo = ativos.find(a => a.id == id);
-    
+
     if (ativo) {
         // 2. Preencher o campo oculto de ID (RF06 - Alterar)
         document.getElementById('ativo-id').value = ativo.id;
@@ -198,8 +198,8 @@ function editarAtivo(id) {
     }
 }
 
-// --- RF07 (vulnerabilidades, ameaças e ativos) ---
-document.getElementById('form-vuln').onsubmit = function(e) {
+// --- RF07 (vulnerabilidades, riscos, ameaças e ativos) ---
+document.getElementById('form-vuln').onsubmit = function (e) {
     e.preventDefault();
     const vuln = {
         id: Date.now(),
@@ -213,7 +213,40 @@ document.getElementById('form-vuln').onsubmit = function(e) {
     renderVulnDropdowns();
 };
 
-document.getElementById('form-threat').onsubmit = function(e) {
+// Garanta que o array de riscos esteja inicializado no topo do arquivo
+let riscos = JSON.parse(localStorage.getItem('riscos')) || [];
+
+// --- FORMULÁRIO DE RISCO (Correção da lógica e do push) ---
+document.getElementById('form-risc').onsubmit = function (e) {
+    e.preventDefault();
+
+    // Pegamos os valores dos campos
+    const ativoId = document.getElementById('risc-ativo-ref').value;
+    const desc = document.getElementById('risc-desc').value;
+    const prob = parseInt(document.getElementById('risc-probabilidade').value) || 0;
+    const imp = parseInt(document.getElementById('risc-impacto').value) || 0;
+
+    const risc = {
+        id: Date.now(),
+        ativoId: ativoId,
+        desc: desc,
+        probabilidade: prob,
+        impacto: imp,
+        valorTotal: prob * imp // Cálculo automático de criticidade
+    };
+
+    // CORREÇÃO: push no array 'riscos', não na função renderRiscos
+    riscos.push(risc);
+
+    localStorage.setItem('riscos', JSON.stringify(riscos));
+
+    // Limpar formulário e atualizar telas
+    this.reset();
+    renderRiscos();
+    alert("Risco cadastrado com sucesso!");
+};
+
+document.getElementById('form-threat').onsubmit = function (e) {
     e.preventDefault();
     const threat = {
         id: Date.now(),
@@ -227,58 +260,80 @@ document.getElementById('form-threat').onsubmit = function(e) {
     renderRiscos();
 };
 
+// --- ATUALIZAÇÃO DOS DROPDOWNS ---
+// Ajustei para que uma única função gerencie os selects de todos os forms
 function renderVulnDropdowns() {
-    const selAtivo = document.getElementById('vuln-ativo-ref');
-    selAtivo.innerHTML = ativos.map(a => `<option value="${a.id}">${a.nome}</option>`).join('');
-    
-    const selVuln = document.getElementById('threat-vuln-ref');
-    selVuln.innerHTML = vulnerabilidades.map(v => `<option value="${v.id}">${v.desc.substring(0,20)}...</option>`).join('');
+    // Dropdown de Ativos no form de Vulnerabilidade
+    const selAtivoVuln = document.getElementById('vuln-ativo-ref');
+    if (selAtivoVuln) selAtivoVuln.innerHTML = ativos.map(a => `<option value="${a.id}">${a.nome}</option>`).join('');
+
+    // Dropdown de Ativos no form de Risco (O que você criou agora)
+    const selAtivoRisc = document.getElementById('risc-ativo-ref');
+    if (selAtivoRisc) selAtivoRisc.innerHTML = ativos.map(a => `<option value="${a.id}">${a.nome}</option>`).join('');
+
+    // Dropdown de Vulnerabilidades no form de Ameaça
+    const selVulnThreat = document.getElementById('threat-vuln-ref');
+    if (selVulnThreat) selVulnThreat.innerHTML = vulnerabilidades.map(v => `<option value="${v.id}">${v.desc.substring(0, 25)}...</option>`).join('');
 }
 
 function renderRiscos() {
     const container = document.getElementById('riscos-lista');
-    
-    // Filtramos apenas vulnerabilidades que possuem um ativo correspondente existente
-    const vulnsValidas = vulnerabilidades.filter(v => ativos.some(a => a.id == v.ativoId));
 
-    if (vulnsValidas.length === 0) {
-        container.innerHTML = "<p style='padding:20px; color:#666;'>Nenhum risco ou vulnerabilidade registrado para os ativos atuais.</p>";
-        return;
-    }
-
-    container.innerHTML = vulnsValidas.map(v => {
+    // Renderiza as Vulnerabilidades e Ameaças (como já funcionava)
+    let html = vulnerabilidades.map(v => {
         const ativo = ativos.find(a => a.id == v.ativoId);
         const ameacasRel = ameacas.filter(t => t.vulnId == v.id);
-        
+        const riscosRel = riscos.filter(r => r.ativoId == v.ativoId); // Riscos do mesmo ativo
+
         return `
-            <div class="control-item" style="border-left: 5px solid #e74c3c;">
-                <div style="display:flex; justify-content:space-between;">
-                    <strong>Ativo: ${ativo ? ativo.nome : 'Excluído'}</strong>
-                    <button onclick="deletarVuln(${v.id})" style="color:red; cursor:pointer; border:none; background:none;">Excluir Vulnerabilidade</button>
-                </div>
-                <span><strong>Vulnerabilidade:</strong> ${v.desc} (${v.tipo})</span>
-                <ul style="margin-top:10px;">
-                    ${ameacasRel.length > 0 
-                        ? ameacasRel.map(t => `<li>Ameaça: ${t.desc} [Fonte: ${t.fonte} | Tipo: ${t.tipo}]</li>`).join('')
-                        : '<li style="color:#999;">Nenhuma ameaça vinculada.</li>'
-                    }
+            <div class="control-item">
+                <strong>Ativo: ${ativo ? ativo.nome : 'N/A'}</strong><br>
+                <span>Vulnerabilidade: ${v.desc}</span>
+                <ul>
+                    ${ameacasRel.map(t => `<li>Ameaça: ${t.desc}</li>`).join('')}
+                    ${riscosRel.map(r => `<li style="color: red;">Risco: ${r.desc} (Nível: ${r.valorTotal})</li>`).join('')}
                 </ul>
             </div>
         `;
     }).join('');
+
+    container.innerHTML = html;
 }
 
 // Função auxiliar para deletar apenas a vulnerabilidade (e suas ameaças)
 function deletarVuln(id) {
-    if (confirm("Excluir esta vulnerabilidade e suas ameaças?")) {
-        vulnerabilidades = vulnerabilidades.filter(v => v.id != id);
-        ameacas = ameacas.filter(a => a.vulnId != id);
-        
+    // Convertemos o ID recebido para String para garantir a comparação correta
+    const idParaDeletar = id.toString();
+
+    if (confirm("Tem certeza que deseja excluir esta vulnerabilidade e todas as ameaças e riscos vinculados a ela?")) {
+
+        // 1. Remove as Ameaças vinculadas
+        ameacas = ameacas.filter(a => a.vulnId.toString() !== idParaDeletar);
+
+        // 2. Remove os Riscos vinculados
+        // Nota: Se o seu risco estiver vinculado ao Ativo e não à Vuln, 
+        // a lógica abaixo remove riscos baseados no ID da vulnerabilidade se você tiver essa ref.
+        if (typeof riscos !== 'undefined') {
+            riscos = riscos.filter(r => r.vulnId && r.vulnId.toString() !== idParaDeletar);
+            localStorage.setItem('riscos', JSON.stringify(riscos));
+        }
+
+        // 3. Remove a Vulnerabilidade em si
+        vulnerabilidades = vulnerabilidades.filter(v => v.id.toString() !== idParaDeletar);
+
+        // 4. Salva as alterações
         localStorage.setItem('vulnerabilidades', JSON.stringify(vulnerabilidades));
         localStorage.setItem('ameacas', JSON.stringify(ameacas));
-        
+
+        // 5. Atualiza a interface (Chame as funções com os nomes que estão no seu código)
         renderRiscos();
-        renderVulnDropdowns();
+        if (typeof renderVulnDropdowns === 'function') {
+            renderVulnDropdowns();
+        } else if (typeof renderVulnDropdowns === 'function') {
+            renderVulnDropdowns();
+        }
+
+        console.log("Vulnerabilidade " + idParaDeletar + " excluída com sucesso.");
     }
 }
 
