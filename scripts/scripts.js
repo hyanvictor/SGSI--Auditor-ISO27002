@@ -228,7 +228,7 @@ document.getElementById('form-risc').onsubmit = function (e) {
     const risc = {
         id: Date.now(),
         ativoId: ativoId,
-        desc: desc,
+        desc: document.getElementById('threat-desc').value,
         probabilidade: prob,
         impacto: imp,
         valorTotal: prob * imp // Cálculo automático de criticidade

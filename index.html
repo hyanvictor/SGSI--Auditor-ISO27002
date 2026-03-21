@@ -79,6 +79,23 @@
                         <button type="submit">Salvar Vulnerabilidade</button>
                     </form>
                 </div>
+                <div class="threat-form-container">
+                    <h3>Nova Ameaça</h3>
+                    <form id="form-threat">
+                        <select id="threat-vuln-ref" required></select>
+                        <input type="text" id="threat-desc" placeholder="Descrição da Ameaça">
+                        <select id="threat-fonte">
+                            <option value="Interna">Interna</option>
+                            <option value="Externa">Externa</option>
+                        </select>
+                        <select id="threat-tipo">
+                            <option value="Natural">Natural</option>
+                            <option value="Acidental">Acidental</option>
+                            <option value="Intencional">Intencional</option>
+                        </select>
+                        <button type="submit">Salvar Ameaça</button>
+                    </form>
+                </div>
                 <div class="risc-form-container">
                     <h3>Novo Risco</h3>
                     <form id="form-risc">
@@ -100,23 +117,6 @@
                         </select>
 
                         <button type="submit">Salvar Risco</button>
-                    </form>
-                </div>
-                <div class="threat-form-container">
-                    <h3>Nova Ameaça</h3>
-                    <form id="form-threat">
-                        <select id="threat-vuln-ref" required></select>
-                        <input type="text" id="threat-desc" placeholder="Descrição da Ameaça">
-                        <select id="threat-fonte">
-                            <option value="Interna">Interna</option>
-                            <option value="Externa">Externa</option>
-                        </select>
-                        <select id="threat-tipo">
-                            <option value="Natural">Natural</option>
-                            <option value="Acidental">Acidental</option>
-                            <option value="Intencional">Intencional</option>
-                        </select>
-                        <button type="submit">Salvar Ameaça</button>
                     </form>
                 </div>
             </div>
