@@ -222,7 +222,6 @@ document.getElementById('form-risc').onsubmit = function (e) {
 
     // Pegamos os valores dos campos
     const ativoId = document.getElementById('risc-ativo-ref').value;
-    const desc = document.getElementById('risc-desc').value;
     const prob = parseInt(document.getElementById('risc-probabilidade').value) || 0;
     const imp = parseInt(document.getElementById('risc-impacto').value) || 0;
 
