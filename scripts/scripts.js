@@ -405,6 +405,23 @@ function deletarCounter(id) {
     }
 }
 
+function gerarRelatorioTXT() {
+    return dados.map(ativos => {
+        return {
+            id: ativo.id,
+            nome: ativo.nome,
+            tipo: ativo.tipo,
+            local: ativo.loca,
+            formato: ativo.formato,
+            classificacao: ativo.classificacao,
+            valor: ativo.valor,
+            custo: ativo.custo,
+            idade: ativo.idade,
+            reposicao: ativo.reposicao
+        }
+    })
+}
+
 // Inicialização
 initAuditoria();
 
